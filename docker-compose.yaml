@@ -1,0 +1,39 @@
+version: '0.0.1'
+
+networks:
+  app_net:
+    driver: bridge
+    name: app_net
+
+services:
+  db:
+    image: mysql
+    restart: always
+    env_file:
+      - environments/docker.env
+    volumes:
+      - ./data/db:/var/lib/mysql
+    networks:
+      - app_net
+    ports:
+      - 3306:3306
+
+  adminer:
+    image: adminer
+    restart: always
+    networks:
+      - app_net
+    ports:
+      - 8080:8080
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      - app_net
+    ports:
+      - 3000:5000
+    volumes:
+      - ./frontend:/app
