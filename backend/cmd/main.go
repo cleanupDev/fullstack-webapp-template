@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/cleanupDev/verbose-pancake/backend/internal/handlers"
 	"github.com/cleanupDev/verbose-pancake/backend/internal/repositories"
 	"github.com/gin-gonic/gin"
 )
@@ -16,9 +17,9 @@ func main() {
 	router.GET("/", helloWorld)
 	router.GET("/ping", repositories.PingDatabase)
 	router.GET("/initdb", repositories.InitDB)
-	router.GET("/show/users", repositories.ShowUsers)
-	router.POST("/create/user", repositories.CreateUser)
-	router.POST("/login", repositories.LoginUser)
+	router.GET("/show/users", handlers.ShowUsers)
+	router.POST("/create/user", handlers.CreateUser)
+	router.POST("/login", handlers.LoginUser)
 
 	router.Run("localhost:5001")
 }
