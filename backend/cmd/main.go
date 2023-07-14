@@ -18,6 +18,7 @@ func main() {
 	router.GET("/initdb", repositories.InitDB)
 	router.GET("/show/users", repositories.ShowUsers)
 	router.POST("/create/user", repositories.CreateUser)
+	router.POST("/login", repositories.LoginUser)
 
 	router.Run("localhost:5001")
 }
