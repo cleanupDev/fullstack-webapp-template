@@ -1,5 +1,5 @@
 # verbose-pancake
-Repo for online p&amp;p interface
+Repo for basic full stack webapp
 
 Backend: Go
 Frontend: Python Flask
