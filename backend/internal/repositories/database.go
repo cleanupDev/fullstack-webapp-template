@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -34,7 +33,7 @@ func init() {
 	dataSourceName = DB_USER + ":" + DB_PASSWORD + "@tcp(" + DB_HOST + ":" + DB_PORT + ")/" + DB_NAME
 }
 
-func getDB() (*sql.DB, error) {
+func GetDB() (*sql.DB, error) {
 	db, err := sql.Open("mysql", dataSourceName)
 	if err != nil {
 		fmt.Println("Error opening database:", err.Error())
@@ -45,9 +44,12 @@ func getDB() (*sql.DB, error) {
 }
 
 func PingDatabase(c *gin.Context) {
-	db, err := getDB()
+	db, err := GetDB()
 	if err != nil {
-		log.Fatal(err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Database is not connected!",
+			"error":   err.Error(),
+		})
 	}
 	defer db.Close()
 
@@ -65,9 +67,12 @@ func PingDatabase(c *gin.Context) {
 }
 
 func InitDB(c *gin.Context) {
-	db, err := getDB()
+	db, err := GetDB()
 	if err != nil {
-		log.Fatal(err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Database is not connected!",
+			"error":   err.Error(),
+		})
 	}
 	defer db.Close()
 
@@ -87,82 +92,13 @@ func InitDB(c *gin.Context) {
 	`)
 
 	if err != nil {
-		log.Fatal(err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Database is not initialized!",
+			"error":   err.Error(),
+		})
 	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Database is initialized!",
-	})
-}
-
-type User struct {
-	ID        *int    `json:"id"`
-	Username  string  `json:"username"`
-	Password  string  `json:"password"`
-	Email     string  `json:"email"`
-	FirstName string  `json:"first_name"`
-	LastName  string  `json:"last_name"`
-	CreatedAt *string `json:"created_at"`
-}
-
-func ShowUsers(c *gin.Context) {
-	db, err := getDB()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	rows, err := db.Query("SELECT * FROM users")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer rows.Close()
-
-	var users []User
-
-	for rows.Next() {
-		var user User
-		err := rows.Scan(&user.ID, &user.Username, &user.Password, &user.Email, &user.FirstName, &user.LastName, &user.CreatedAt)
-		if err != nil {
-			log.Fatal(err)
-		}
-		users = append(users, user)
-	}
-
-	usersJSON, err := json.MarshalIndent(users, "", "  ")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	c.Data(http.StatusOK, "application/json", usersJSON)
-}
-
-func CreateUser(c *gin.Context) {
-	db, err := getDB()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	var user User
-
-	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-
-	_, err = db.Exec("INSERT INTO users (username, password, email, first_name, last_name) VALUES (?, ?, ?, ?, ?)", user.Username, user.Password, user.Email, user.FirstName, user.LastName)
-
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-
-	c.JSON(http.StatusCreated, gin.H{
-		"message": "User is created!",
 	})
 }
