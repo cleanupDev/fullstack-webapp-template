@@ -1,4 +1,8 @@
-FROM golang:1.20.0-alpine AS build
+FROM golang:latest AS build
+
+ENV GO111MODULE=on
+
+ENV CGO_ENABLED=0
 
 WORKDIR /app
 
@@ -6,14 +10,14 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN go build -o main
+RUN go build -C cmd -o main
 
 FROM alpine:latest
 
-WORKDIR /app
+COPY --from=build /app/cmd/main ./
 
-COPY --from=build /app/main ./
+RUN chmod +x ./main
 
 EXPOSE 5001
 
-CMD ["./main"]
+CMD ./main

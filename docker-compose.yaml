@@ -9,7 +9,7 @@ services:
   db:
     image: mysql
     restart: always
-    container_name: bing_chiling_db
+    container_name: mysql_database
     env_file:
       - environments/docker.env
     volumes:
@@ -31,10 +31,26 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    container_name: frontend
     restart: always
+    env_file:
+      - environments/frontend.env
     networks:
       - app_net
     ports:
       - 3000:5000
     volumes:
       - ./frontend:/app
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    env_file:
+      - environments/backend.env
+    restart: always
+    networks:
+      - app_net
+    ports:
+      - 5001:5001

@@ -22,7 +22,7 @@ var dataSourceName string
 func init() {
 	err := godotenv.Load("./../environments/backend.env")
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Println("Error loading .env file")
 	}
 
 	DB_USER = os.Getenv("USER")
@@ -31,6 +31,8 @@ func init() {
 	DB_HOST = os.Getenv("HOST")
 
 	dataSourceName = DB_USER + ":" + DB_PASSWORD + "@tcp(" + DB_HOST + ":" + DB_PORT + ")/" + DB_NAME
+
+	log.Println("------- DBG ------- dataSourceName: ", dataSourceName)
 }
 
 func GetDB() (*sql.DB, error) {

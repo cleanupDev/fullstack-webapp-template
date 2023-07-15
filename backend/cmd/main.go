@@ -21,5 +21,5 @@ func main() {
 	router.POST("/create/user", handlers.CreateUser)
 	router.POST("/login", handlers.LoginUser)
 
-	router.Run("localhost:5001")
+	router.Run("0.0.0.0:5001")
 }
