@@ -10,3 +10,7 @@ def index():
 @app.route('/about')
 def about():
     return 'About page'
+
+@app.route('/backend')
+def api():
+    return requests.get('http://backend:5001').content
