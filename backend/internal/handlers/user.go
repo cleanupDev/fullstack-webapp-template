@@ -72,7 +72,8 @@ func CreateUser(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
+			"error":   err.Error(),
+			"message": "Invalid JSON!",
 		})
 		return
 	}
@@ -88,12 +89,9 @@ func CreateUser(c *gin.Context) {
 	}
 
 	if count > 0 {
-		// Username already exists, return an error
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Username already exists",
-			"email": user.Email,
-			"user":  user.Username,
-			"id":    nil,
+			"error":   "Username already exists",
+			"message": "Username already exists!",
 		})
 		return
 	}
@@ -108,12 +106,9 @@ func CreateUser(c *gin.Context) {
 	}
 
 	if count > 0 {
-		// Email already exists, return an error
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Email address already exists",
-			"email": user.Email,
-			"user":  user.Username,
-			"id":    nil,
+			"error":   "Email address already exists",
+			"message": "Email address already exists!",
 		})
 		return
 	}
@@ -136,10 +131,7 @@ func CreateUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, gin.H{
-		"message": "models.User is created!",
-		"email":   user.Email,
-		"user":    user.Username,
-		"id":      user.ID,
+		"message": "User created!",
 	})
 }
 
@@ -168,7 +160,8 @@ func LoginUser(c *gin.Context) {
 	err = db.QueryRow("SELECT id, password, email FROM users WHERE username = ?", user.Username).Scan(&user.ID, &hashedPassword, &user.Email)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
+			"error":   err.Error(),
+			"message": "User not found!",
 		})
 		return
 	}
@@ -177,7 +170,6 @@ func LoginUser(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"error":   err.Error(),
-			"user":    user.Username,
 			"message": "Wrong password!",
 		})
 		return
@@ -185,8 +177,42 @@ func LoginUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "models.User is logged in!",
-		"email":   user.Email,
-		"user":    user.Username,
-		"id":      user.ID,
+		"data":    user,
 	})
+}
+
+func GetUser(c *gin.Context) {
+	db, err := repositories.GetDB()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Database is not connected!",
+			"error":   err.Error(),
+		})
+		return
+	}
+	defer db.Close()
+
+	var user models.User
+
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	err = db.QueryRow("SELECT username, email, first_name, last_name FROM users WHERE id = ?", user.ID).Scan(&user.Username, &user.Email, &user.FirstName, &user.LastName)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   err.Error(),
+			"message": "User not found!",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "This is your user!",
+		"data":    user,
+	})
+
 }

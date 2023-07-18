@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -31,14 +30,12 @@ func init() {
 	DB_HOST = os.Getenv("HOST")
 
 	dataSourceName = DB_USER + ":" + DB_PASSWORD + "@tcp(" + DB_HOST + ":" + DB_PORT + ")/" + DB_NAME
-
-	log.Println("------- DBG ------- dataSourceName: ", dataSourceName)
 }
 
 func GetDB() (*sql.DB, error) {
 	db, err := sql.Open("mysql", dataSourceName)
 	if err != nil {
-		fmt.Println("Error opening database:", err.Error())
+		log.Println("------- DBG ------- err: ", err.Error())
 		return nil, err
 	}
 
