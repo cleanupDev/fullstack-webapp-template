@@ -1,0 +1,15 @@
+<nav>
+    <div class="navbar-container">
+        <div class="navbar-logo">
+            <a href="/">PLACEHOLDER</a>
+        </div>
+        <ul class="navbar-links">
+            <li><a {% if request.path == '/' %}class="active"{% endif %} href="/">Index</a></li>
+            <li><a {% if request.path == '/home' %}class="active"{% endif %} href="/home">Home</a></li>
+            <li><a {% if request.path == '/login' %}class="active"{% endif %} href="/login">Login</a></li>
+            <li><a {% if request.path == '/register' %}class="active"{% endif %} href="/register">Register</a></li>
+            <li><a {% if request.path == '/logout' %}class="active"{% endif %} href="/logout">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">

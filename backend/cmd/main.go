@@ -20,6 +20,7 @@ func main() {
 	router.GET("/show/users", handlers.ShowUsers)
 	router.POST("/create/user", handlers.CreateUser)
 	router.POST("/login", handlers.LoginUser)
+	router.POST("/user", handlers.GetUser)
 
 	router.Run("0.0.0.0:5001")
 }

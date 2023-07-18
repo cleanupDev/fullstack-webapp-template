@@ -9,6 +9,9 @@
     <title>Login</title>
 </head>
 <body>
+
+    {% include 'navbar.html' %}
+
     <div id="form_container">
         <form id="common_form", name="login_form" onsubmit="event.preventDefault(); submitForm('login_form', '/login', onSuccess, onError);">
             <label for="username">Username</label>

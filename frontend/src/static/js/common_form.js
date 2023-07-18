@@ -1,3 +1,16 @@
+function submitForm(formName, url, successCallback, errorCallback) {
+    var form = $('form[name="' + formName + '"]');
+    var data = form.serialize();
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: data,
+        success: successCallback,
+        error: errorCallback
+    });
+}
+
 function onSuccess(response) {
     if (response.status === 'success') {
         alert(response.message);
@@ -13,22 +26,8 @@ function onSuccess(response) {
 }
 
 function onError(response) {
-    alert(response.status)
-    alert("Error: " + response.message);
+    alert(response.status + "Error: " + response.message);
     location.reload();
-}
-
-function submitForm(formName, url, successCallback, errorCallback) {
-    var form = $('form[name="' + formName + '"]');
-    var data = form.serialize();
-
-    $.ajax({
-        type: 'POST',
-        url: url,
-        data: data,
-        success: successCallback,
-        error: errorCallback
-    });
 }
 
 $(document).ready(function () {});
