@@ -4,16 +4,19 @@
 
 ## Table of Contents
 
-- Overview
-- Features
-- Technologies Used
-- Setup and Installation
-  - Manual
-  - Docker
-- Usage
-- API Documentation
-- License
-- Acknowledgments
+- [Full-Stack Web Application Template](#full-stack-web-application-template)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Features](#features)
+  - [Technologies Used](#technologies-used)
+  - [Setup and Installation](#setup-and-installation)
+    - [Manual](#manual)
+    - [Docker](#docker)
+  - [Usage](#usage)
+  - [API Documentation](#api-documentation)
+  - [License](#license)
+  - [Acknowledgments](#acknowledgments)
+  - [WIP](#wip)
 
 ## Overview
 
@@ -132,4 +135,4 @@ This project is licensed under the MIT License. See the LICENSE file for details
 
 ---
 
-### WIP
+## WIP
