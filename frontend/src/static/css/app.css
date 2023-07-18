@@ -36,7 +36,8 @@ body {
 }
 
 #common_form input[type="text"],
-#common_form input[type="password"] {
+#common_form input[type="password"],
+#common_form input[type="email"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
@@ -46,6 +47,7 @@ body {
 }
 
 #common_form button {
+    width: 100%;
     padding: 10px 20px;
     margin-top: 10px;
     border: none;
@@ -62,7 +64,6 @@ body {
 }
 
 #common_form button[name="redirect_btn"] {
-    margin-left: 10px;
     background-color: #6c757d;
 }
 
