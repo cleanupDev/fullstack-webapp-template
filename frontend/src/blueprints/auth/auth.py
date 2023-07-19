@@ -26,7 +26,7 @@ def login():
         user = User(**request.form.to_dict())
         login_response = requests.post(
             BACKEND_URL + "/login",
-            json=user.__repr__(),
+            json=user.to_dict(),
         )
         if login_response.status_code == 200:
             logged_in_user = User(**login_response.json()["data"])
@@ -63,7 +63,7 @@ def register():
         user = User(**request.form.to_dict())
         register_response = requests.post(
             BACKEND_URL + "/create/user",
-            json=user.__repr__(),
+            json=user.to_dict(),
         )
         if register_response.status_code == 201:
             response = {
