@@ -1,8 +1,11 @@
 package main
 
 import (
+	"os"
+
 	"github.com/cleanupDev/verbose-pancake/backend/internal/handlers"
 	"github.com/cleanupDev/verbose-pancake/backend/internal/repositories"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,6 +17,15 @@ func helloWorld(c *gin.Context) {
 
 func main() {
 	router := gin.Default()
+
+	config := cors.Config{
+		AllowOrigins: []string{os.Getenv("FRONTEND_URL")},
+		AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders: []string{"Authorization", "Content-Type"},
+	}
+
+	router.Use(cors.New(config))
+
 	router.GET("/", helloWorld)
 	router.GET("/ping", repositories.PingDatabase)
 	router.GET("/initdb", repositories.InitDB)
@@ -22,5 +34,5 @@ func main() {
 	router.POST("/login", handlers.LoginUser)
 	router.POST("/user", handlers.GetUser)
 
-	router.Run("0.0.0.0:5001")
+	router.Run(os.Getenv("BACKEND_URL"))
 }
